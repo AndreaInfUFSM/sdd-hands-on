@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Challenge of the Day - Friendly Variant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <p class="eyebrow">Programming Paradigms</p>
+      <h1>Challenge of the Day</h1>
+      <p class="subtitle">A small daily puzzle to keep your paradigm brain from turning into soup.</p>
+    </section>
+
+    <section class="student-card">
+      <label for="student-input">Your name</label>
+      <input id="student-input" type="text" autocomplete="off" placeholder="Start typing your name...">
+      <ul id="student-suggestions" class="suggestions"></ul>
+      <p id="student-status" class="hint"></p>
+    </section>
+
+    <section id="challenge" class="challenge-card"></section>
+
+    <section class="answer-card">
+      <form id="response-form"></form>
+      <button id="submit-button" type="button">Submit answer</button>
+    </section>
+
+    <section id="feedback" class="feedback-card hidden"></section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

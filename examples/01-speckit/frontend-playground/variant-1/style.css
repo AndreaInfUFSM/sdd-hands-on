@@ -1,0 +1,257 @@
+:root {
+  --bg: #f6f8fb;
+  --surface: #ffffff;
+  --surface-strong: #eef5ff;
+  --text: #172033;
+  --muted: #657085;
+  --border: #d9e2ef;
+  --accent: #3267ff;
+  --accent-dark: #244fd0;
+  --success-bg: #edf8f1;
+  --success-border: #b9e5c8;
+  --code-bg: #101827;
+  --code-text: #f3f7ff;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --shadow: 0 16px 40px rgba(20, 35, 70, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, #dce9ff, transparent 35%),
+    var(--bg);
+  color: var(--text);
+}
+
+.app-shell {
+  width: min(760px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 56px;
+}
+
+.hero {
+  margin-bottom: 24px;
+}
+
+.eyebrow,
+.daily-label {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.1;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 8vw, 4rem);
+}
+
+.subtitle {
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.student-card,
+.challenge-card,
+.answer-card,
+.feedback-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.student-card label,
+.field-group > span,
+legend {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: 3px solid rgba(50, 103, 255, 0.18);
+  border-color: var(--accent);
+}
+
+.suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 6px;
+}
+
+.suggestions button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.challenge-header {
+  margin-bottom: 20px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.tags span {
+  background: var(--surface-strong);
+  color: var(--accent-dark);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.text-block {
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.code-block {
+  margin: 18px 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--code-bg);
+  color: var(--code-text);
+}
+
+.code-block figcaption {
+  padding: 10px 14px;
+  color: #b9c5dc;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  font-size: 0.85rem;
+}
+
+pre {
+  margin: 0;
+  padding: 18px;
+  overflow-x: auto;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.95rem;
+}
+
+.callout {
+  border-radius: var(--radius-md);
+  background: #fff7df;
+  border: 1px solid #f1d68b;
+  padding: 16px;
+  margin: 18px 0;
+  line-height: 1.5;
+}
+
+.field-group {
+  border: 0;
+  padding: 0;
+  margin: 0 0 22px;
+}
+
+.choice-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.choice-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  cursor: pointer;
+}
+
+.choice-card:hover {
+  border-color: var(--accent);
+}
+
+#submit-button {
+  border: 0;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 14px 22px;
+  cursor: pointer;
+  width: 100%;
+}
+
+#submit-button:hover {
+  background: var(--accent-dark);
+}
+
+.feedback-card {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  color: #9f1d1d;
+  font-weight: 700;
+}
+
+@media (min-width: 700px) {
+  .choice-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #submit-button {
+    width: auto;
+    min-width: 220px;
+  }
+}
