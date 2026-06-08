@@ -1,14 +1,20 @@
-import { mockBootstrap } from "../shared/mock-data.js";
-import { challengeFixtures } from "../shared/challenge-fixtures.js";
+import { fetchJson, setBackendUrl, getBackendUrl } from "./api-client.js";
 
-const state = {
-  selectedStudent: null,
-  typedName: "",
-  response: {},
-  currentFixture: challengeFixtures[0]
+// Application state
+const appState = {
+  config: null,
+  students: [],
+  currentChallenge: null,
+  selectedStudentId: null,
+  selectedStudentName: null,
+  currentResponse: {},
+  feedback: null,
+  isLoading: false,
+  error: null,
+  submissionInProgress: false,
 };
 
-const challengeSelector = document.querySelector("#challenge-selector");
+// DOM elements
 const studentInput = document.querySelector("#student-input");
 const suggestionsEl = document.querySelector("#student-suggestions");
 const studentStatus = document.querySelector("#student-status");
@@ -18,6 +24,9 @@ const submitButton = document.querySelector("#submit-button");
 const feedbackEl = document.querySelector("#feedback");
 const formMessageEl = document.querySelector("#form-message");
 
+/**
+ * HTML escape utility - prevents XSS attacks
+ */
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -27,6 +36,49 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+/**
+ * Show loading state
+ */
+function showLoading() {
+  appState.isLoading = true;
+  submitButton.disabled = true;
+  studentInput.disabled = true;
+  responseForm.querySelectorAll("input, textarea, select").forEach(el => el.disabled = true);
+  setFormMessage("Carregando...", "loading");
+}
+
+/**
+ * Hide loading state
+ */
+function hideLoading() {
+  appState.isLoading = false;
+  submitButton.disabled = false;
+  studentInput.disabled = false;
+  responseForm.querySelectorAll("input, textarea, select").forEach(el => el.disabled = false);
+}
+
+/**
+ * Display form message (error, success, loading)
+ */
+function setFormMessage(message, type = "error") {
+  formMessageEl.className = `form-message form-message-${type}`;
+  formMessageEl.textContent = message;
+  if (!formMessageEl.classList.contains("hidden")) {
+    formMessageEl.classList.remove("hidden");
+  }
+}
+
+/**
+ * Clear form message
+ */
+function clearFormMessage() {
+  formMessageEl.classList.add("hidden");
+  formMessageEl.textContent = "";
+}
+
+/**
+ * Render a single challenge block
+ */
 function renderBlock(block) {
   if (block.type === "markdown") {
     return `<p class="text-block">${escapeHtml(block.content)}</p>`;
@@ -70,26 +122,9 @@ function renderBlock(block) {
   return `<p class="error">Tipo de bloco não suportado: ${escapeHtml(block.type)}</p>`;
 }
 
-function renderChallenge() {
-  const challenge = state.currentFixture.challenge;
-
-  challengeEl.innerHTML = `
-    <div class="challenge-header">
-      <p class="daily-label">Desafio do dia</p>
-      <h2>${escapeHtml(challenge.title)}</h2>
-      <div class="tags">
-        ${challenge.topics.map(topic => `<span>${escapeHtml(topic)}</span>`).join("")}
-        <span>${escapeHtml(challenge.difficulty)}</span>
-      </div>
-    </div>
-
-    <div class="challenge-body">
-      ${(challenge.intro ?? []).map(renderBlock).join("")}
-      ${(challenge.prompt ?? []).map(renderBlock).join("")}
-    </div>
-  `;
-}
-
+/**
+ * Render a single response field
+ */
 function renderResponseField(field) {
   if (field.type === "single_choice") {
     return `
@@ -98,7 +133,7 @@ function renderResponseField(field) {
         <div class="choice-grid">
           ${field.options.map(option => `
             <label class="choice-card">
-              <input type="radio" name="${escapeHtml(field.id)}" value="${escapeHtml(option.id)}">
+              <input type="radio" name="${escapeHtml(field.id)}" value="${escapeHtml(option.id)}" ${field.required ? "required" : ""}>
               <span class="choice-option-letter">${escapeHtml(option.id).toUpperCase()})</span>
               <span class="choice-option-text">${escapeHtml(option.label)}</span>
             </label>
@@ -116,6 +151,8 @@ function renderResponseField(field) {
           name="${escapeHtml(field.id)}"
           rows="5"
           placeholder="${escapeHtml(field.placeholder ?? "")}"
+          ${field.required ? "required" : ""}
+          ${field.min_length ? `data-min-length="${field.min_length}"` : ""}
         ></textarea>
       </label>
     `;
@@ -130,6 +167,8 @@ function renderResponseField(field) {
           name="${escapeHtml(field.id)}"
           rows="5"
           placeholder="${escapeHtml(field.placeholder ?? "")}"
+          ${field.required ? "required" : ""}
+          ${field.min_length ? `data-min-length="${field.min_length}"` : ""}
         ></textarea>
       </label>
     `;
@@ -138,13 +177,46 @@ function renderResponseField(field) {
   return `<p class="error">Campo de resposta não suportado: ${escapeHtml(field.type)}</p>`;
 }
 
-function renderResponseForm() {
-  const response = state.currentFixture.challenge.response;
+/**
+ * Render the entire challenge
+ */
+function renderChallenge() {
+  const challenge = appState.currentChallenge;
 
-  if (!response) {
+  if (!challenge) {
+    challengeEl.innerHTML = `<p class="error">Nenhum desafio carregado.</p>`;
+    return;
+  }
+
+  challengeEl.innerHTML = `
+    <div class="challenge-header">
+      <p class="daily-label">Desafio do dia</p>
+      <h2>${escapeHtml(challenge.title)}</h2>
+      <div class="tags">
+        ${(challenge.topics ?? []).map(topic => `<span>${escapeHtml(topic)}</span>`).join("")}
+        ${challenge.difficulty ? `<span>${escapeHtml(challenge.difficulty)}</span>` : ""}
+      </div>
+    </div>
+
+    <div class="challenge-body">
+      ${(challenge.intro ?? []).map(renderBlock).join("")}
+      ${(challenge.prompt ?? []).map(renderBlock).join("")}
+    </div>
+  `;
+}
+
+/**
+ * Render the response form fields
+ */
+function renderResponseForm() {
+  const challenge = appState.currentChallenge;
+
+  if (!challenge || !challenge.response) {
     responseForm.innerHTML = `<p class="error">Este desafio não tem um modelo de resposta.</p>`;
     return;
   }
+
+  const response = challenge.response;
 
   if (response.type === "mixed") {
     responseForm.innerHTML = response.fields.map(renderResponseField).join("");
@@ -155,6 +227,8 @@ function renderResponseForm() {
     responseForm.innerHTML = renderResponseField({
       id: "answer",
       label: response.label ?? "Sua resposta",
+      required: response.required ?? false,
+      min_length: response.min_length,
       ...response
     });
     return;
@@ -163,93 +237,101 @@ function renderResponseForm() {
   responseForm.innerHTML = `<p class="error">Tipo de resposta não suportado: ${escapeHtml(response.type)}</p>`;
 }
 
-function renderChallengeSelector() {
-  challengeSelector.innerHTML = challengeFixtures.map(fixture => `
-    <option value="${escapeHtml(fixture.id)}">
-      ${escapeHtml(fixture.label)}
-    </option>
-  `).join("");
+/**
+ * Render student suggestions
+ */
+function renderSuggestions(matches) {
+  suggestionsEl.innerHTML = "";
 
-  challengeSelector.value = state.currentFixture.id;
-}
-
-function resetFeedback() {
-  feedbackEl.classList.add("hidden");
-  feedbackEl.innerHTML = "";
-}
-
-function resetResponseState() {
-  responseForm.reset();
-  resetFeedback();
-  clearFormMessage();
-}
-
-function showFormMessage(message, type = "error") {
-  formMessageEl.className = `form-message form-message-${type}`;
-  formMessageEl.textContent = message;
-}
-
-function clearFormMessage() {
-  formMessageEl.classList.add("hidden");
-  formMessageEl.textContent = "";
-}
-
-function updateCurrentFixture(fixtureId) {
-  const fixture = challengeFixtures.find(item => item.id === fixtureId);
-
-  if (!fixture) {
-    console.warn(`Fixture not found: ${fixtureId}`);
+  if (matches.length === 0) {
+    suggestionsEl.classList.add("hidden");
     return;
   }
 
-  state.currentFixture = fixture;
-  renderChallenge();
-  renderResponseForm();
-  resetFeedback();
+  matches.forEach(student => {
+    const item = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.studentId = student.student_id || student.id;
+    button.textContent = escapeHtml(student.display_name);
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      selectStudent(student);
+    });
+    item.appendChild(button);
+    suggestionsEl.appendChild(item);
+  });
+
+  suggestionsEl.classList.remove("hidden");
 }
 
-function updateSuggestions() {
+/**
+ * Handle student input and show suggestions
+ */
+function handleStudentInput() {
   const query = studentInput.value.trim().toLowerCase();
-  state.typedName = studentInput.value;
-  state.selectedStudent = null;
+  appState.selectedStudentName = studentInput.value;
 
   if (!query) {
+    appState.selectedStudentId = null;
     suggestionsEl.innerHTML = "";
+    suggestionsEl.classList.add("hidden");
     studentStatus.textContent = "";
     return;
   }
 
-  const matches = mockBootstrap.students.filter(student =>
+  const matches = appState.students.filter(student =>
     student.display_name.toLowerCase().includes(query)
   );
 
-  suggestionsEl.innerHTML = matches.map(student => `
-    <li>
-      <button type="button" data-student-id="${escapeHtml(student.student_id)}">
-        ${escapeHtml(student.display_name)}
-      </button>
-    </li>
-  `).join("");
+  // If input doesn't match exactly, clear selection
+  if (appState.selectedStudentId && !matches.find(s => s.student_id === appState.selectedStudentId)) {
+    appState.selectedStudentId = null;
+  }
 
-  if (matches.length === 0 && mockBootstrap.app.allow_manual_name) {
-    studentStatus.textContent = "Este nome não está na lista, mas a digitação manual é permitida.";
-  } else if (matches.length === 0) {
-    studentStatus.textContent = "Escolha um nome da lista.";
+  renderSuggestions(matches);
+
+  // Update status message
+  if (matches.length === 0) {
+    if (appState.config?.allow_manual_name) {
+      studentStatus.textContent = "Este nome não está na lista, mas a digitação manual é permitida.";
+    } else {
+      studentStatus.textContent = "Escolha um nome da lista.";
+    }
   } else {
     studentStatus.textContent = "";
   }
 }
 
+/**
+ * Select a student from suggestions
+ */
+function selectStudent(student) {
+  appState.selectedStudentId = student.student_id || student.id;
+  appState.selectedStudentName = student.display_name;
+  studentInput.value = student.display_name;
+  suggestionsEl.innerHTML = "";
+  suggestionsEl.classList.add("hidden");
+  studentStatus.textContent = `Selecionado: ${escapeHtml(student.display_name)}`;
+  clearFormMessage();
+}
+
+/**
+ * Collect response from form
+ */
 function collectResponse() {
   const formData = new FormData(responseForm);
   const response = {};
-  const responseModel = state.currentFixture.challenge.response;
+  const responseModel = appState.currentChallenge?.response;
+
+  if (!responseModel) {
+    return response;
+  }
 
   if (responseModel.type === "mixed") {
     for (const field of responseModel.fields) {
       response[field.id] = String(formData.get(field.id) ?? "").trim();
     }
-
     return response;
   }
 
@@ -257,19 +339,26 @@ function collectResponse() {
   return response;
 }
 
+/**
+ * Validate response before submission
+ */
 function validateResponse(response) {
-  const responseModel = state.currentFixture.challenge.response;
+  const responseModel = appState.currentChallenge?.response;
+
+  if (!responseModel) {
+    return null;
+  }
 
   if (responseModel.type === "mixed") {
     for (const field of responseModel.fields) {
       const value = String(response[field.id] ?? "").trim();
 
       if (field.required && !value) {
-        return `Preencha o campo: ${field.label}`;
+        return `Preencha o campo: ${escapeHtml(field.label)}`;
       }
 
       if (field.min_length && value.length < field.min_length) {
-        return `Escreva uma resposta mais longa para: ${field.label}`;
+        return `${escapeHtml(field.label)}: escreva pelo menos ${field.min_length} caracteres`;
       }
     }
 
@@ -283,109 +372,233 @@ function validateResponse(response) {
   }
 
   if (responseModel.min_length && value.length < responseModel.min_length) {
-    return "Escreva uma resposta um pouco mais longa.";
+    return `Escreva uma resposta um pouco mais longa (mínimo ${responseModel.min_length} caracteres).`;
   }
 
   return null;
 }
 
-suggestionsEl.addEventListener("click", event => {
-  const button = event.target.closest("button[data-student-id]");
-  if (!button) return;
-
-  const student = mockBootstrap.students.find(
-    item => item.student_id === button.dataset.studentId
-  );
-
-  if (!student) return;
-
-  state.selectedStudent = student;
-  state.typedName = student.display_name;
-  studentInput.value = student.display_name;
-  suggestionsEl.innerHTML = "";
-  studentStatus.textContent = `Selecionado: ${student.display_name}`;
-});
-
-// studentInput.addEventListener("input", updateSuggestions);
-
-studentInput.addEventListener("input", () => {
-  clearFormMessage();
-  updateSuggestions();
-});
-
-challengeSelector.addEventListener("change", event => {
-  updateCurrentFixture(event.target.value);
-  resetResponseState();
-});
-
-submitButton.addEventListener("click", () => {
-  const typedName = studentInput.value.trim();
-
-  if (!state.selectedStudent && !typedName) {
-    showFormMessage("Escolha ou digite seu nome.");
+/**
+ * Display feedback from backend
+ */
+function displayFeedback() {
+  if (!appState.feedback) {
     return;
   }
 
-  const response = collectResponse();
-  const validationMessage = validateResponse(response);
+  const feedback = appState.feedback;
+  let statusHtml = "";
 
-  if (validationMessage) {
-    showFormMessage(validationMessage);
-    return;
-  }
-
-  clearFormMessage();
-
-  const responseModel = state.currentFixture.challenge.response;
-  const feedback = state.currentFixture.feedback;
-
-  let answerStatusHtml = "";
-
-  if (responseModel.type === "mixed") {
-    const singleChoiceField = responseModel.fields.find(
-      field => field.type === "single_choice"
-    );
-
-    if (singleChoiceField?.correct_option_id) {
-      const selectedOptionId = response[singleChoiceField.id];
-      const selectedOption = singleChoiceField.options.find(
-        option => option.id === selectedOptionId
-      );
-
-      const isCorrect = selectedOptionId === singleChoiceField.correct_option_id;
-
-      answerStatusHtml = `
-        <div class="answer-status ${isCorrect ? "answer-correct" : "answer-incorrect"}">
-          <p class="answer-status-label">
-            ${isCorrect ? "Resposta correta" : "Resposta incorreta"}
-          </p>
-          <p>
-            Você escolheu a opção 
-            <strong>${escapeHtml(selectedOptionId).toUpperCase()}) ${escapeHtml(selectedOption?.label ?? "")}</strong>.
-          </p>
-        </div>
-      `;
-    }
+  if (feedback.status) {
+    const statusClass = feedback.status === "correct" ? "answer-correct" : "answer-incorrect";
+    statusHtml = `
+      <div class="answer-status ${statusClass}">
+        <p class="answer-status-label">
+          ${feedback.status === "correct" ? "Resposta correta" : "Resposta incorreta"}
+        </p>
+      </div>
+    `;
   }
 
   feedbackEl.classList.remove("hidden");
   feedbackEl.innerHTML = `
     <h2>Feedback</h2>
-
-    ${answerStatusHtml}
-
-    ${(feedback.messages ?? []).map(message => `
-      <p>${escapeHtml(message)}</p>
-    `).join("")}
-
-    <div class="after-submission">
-      ${(feedback.after_submission ?? []).map(renderBlock).join("")}
-    </div>
+    ${statusHtml}
+    <p>${escapeHtml(feedback.content ?? "")}</p>
   `;
 
   feedbackEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/**
+ * Handle form submission
+ */
+async function handleSubmit() {
+  clearFormMessage();
+
+  // Check student selected
+  const studentName = studentInput.value.trim();
+  if (!appState.selectedStudentId && !studentName) {
+    setFormMessage("Escolha ou digite seu nome.", "error");
+    return;
+  }
+
+  // Collect and validate response
+  const response = collectResponse();
+  const validationMessage = validateResponse(response);
+
+  if (validationMessage) {
+    setFormMessage(validationMessage, "error");
+    return;
+  }
+
+  // Submit
+  appState.submissionInProgress = true;
+  showLoading();
+
+  try {
+    const submissionPayload = {
+      studentId: appState.selectedStudentId,
+      studentName: studentName,
+      challengeId: appState.currentChallenge.id,
+      response: response
+    };
+
+    console.log("Submitting response:", submissionPayload);
+
+    const result = await fetchJson("/submitResponse", {
+      method: "POST",
+      body: submissionPayload
+    });
+
+    appState.feedback = result.feedback || result;
+    clearFormMessage();
+    displayFeedback();
+
+    // Disable form after submission
+    responseForm.querySelectorAll("input, textarea, select").forEach(el => el.disabled = true);
+    submitButton.disabled = true;
+
+  } catch (error) {
+    console.error("Submission error:", error);
+    setFormMessage(`Erro ao enviar: ${error.message}. Tente novamente.`, "error");
+  } finally {
+    appState.submissionInProgress = false;
+    hideLoading();
+  }
+}
+
+/**
+ * Initialize app on page load
+ */
+async function initializeApp() {
+  showLoading();
+
+  try {
+    // Load config
+    console.log("Loading config...");
+    const config = await fetchJson("/getConfig");
+    appState.config = config;
+    console.log("Config loaded:", config);
+
+    // Load students
+    console.log("Loading students...");
+    const studentsData = await fetchJson("/getStudents");
+    appState.students = studentsData.students || studentsData || [];
+    console.log("Students loaded:", appState.students);
+
+    // Load active challenge
+    console.log("Loading active challenge...");
+    const challengeData = await fetchJson("/getActiveChallenge");
+    appState.currentChallenge = challengeData.challenge || challengeData;
+    console.log("Challenge loaded:", appState.currentChallenge);
+
+    // Render UI
+    renderChallenge();
+    renderResponseForm();
+
+    // Update student input hint
+    if (appState.students.length === 0) {
+      studentStatus.textContent = "Nenhuma lista de estudantes disponível. Digite seu nome.";
+    } else {
+      studentStatus.textContent = appState.config?.allow_manual_name
+        ? "Selecione um estudante ou digite seu nome."
+        : "Selecione seu nome na lista.";
+    }
+
+    clearFormMessage();
+
+  } catch (error) {
+    console.error("Initialization error:", error);
+    setFormMessage(`Erro ao carregar: ${error.message}. Verifique a conexão com o backend.`, "error");
+    challengeEl.innerHTML = `<p class="error">Não foi possível carregar o desafio.</p>`;
+  } finally {
+    hideLoading();
+  }
+}
+
+// Event listeners
+studentInput.addEventListener("input", handleStudentInput);
+studentInput.addEventListener("blur", () => {
+  setTimeout(() => {
+    suggestionsEl.classList.add("hidden");
+  }, 200);
 });
 
-renderChallengeSelector();
-renderChallenge();
-renderResponseForm();
+suggestionsEl.addEventListener("click", (e) => {
+  const button = e.target.closest("button");
+  if (button) {
+    const studentId = button.dataset.studentId;
+    const student = appState.students.find(s => (s.student_id || s.id) === studentId);
+    if (student) {
+      selectStudent(student);
+    }
+  }
+});
+
+submitButton.addEventListener("click", handleSubmit);
+
+// Initialize on page load
+window.addEventListener("load", initializeApp);
+
+/**
+ * Add retry button to error messages
+ */
+function addRetryButton(retryFn) {
+  const existingButton = formMessageEl.querySelector("button");
+  if (existingButton) existingButton.remove();
+  
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "Tentar novamente";
+  button.style.cssText = `
+    margin-top: 8px;
+    padding: 8px 14px;
+    background: var(--red);
+    color: var(--cream);
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+  `;
+  button.addEventListener("click", () => {
+    clearFormMessage();
+    retryFn();
+  });
+  
+  formMessageEl.appendChild(button);
+}
+
+/**
+ * Enhanced error handler with retry capability
+ */
+async function handleInitializationError(error, retryFn) {
+  console.error("Initialization error:", error);
+  setFormMessage(`Erro ao carregar: ${error.message}`, "error");
+  addRetryButton(retryFn);
+  challengeEl.innerHTML = `<p class="error">Não foi possível carregar o desafio. Verifique a conexão com o backend.</p>`;
+}
+
+/**
+ * Check if backend is available
+ */
+async function isBackendAvailable() {
+  try {
+    const response = await fetch(`${getBackendUrl()}/getConfig`, { 
+      method: 'HEAD',
+      mode: 'cors'
+    }).catch(() => false);
+    return response !== false;
+  } catch {
+    return false;
+  }
+}
+
+// Store original initialize function
+const originalInitializeApp = initializeApp;
+
+// Enhance initializeApp with retry capability
+window.initializeApp = async function() {
+  await originalInitializeApp();
+};

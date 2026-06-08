@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Desafio do Dia - Paradigmas de Programação</title>
+  <title>Challenge of the Day - Energetic Variant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -14,42 +14,49 @@
         <span></span>
       </div>
 
-      <p class="eyebrow">Paradigmas de Programação</p>
-      <h1>Desafio do Dia</h1>
+      <p class="eyebrow">Programming Paradigms</p>
+      <h1>Challenge of the Day</h1>
       <p class="subtitle">
-        Um desafio rápido. Um aprendizado importante. 
+        One quick challenge. One sharp idea. No passive scrolling, tragically.
       </p>
+    </section>
+
+    <section class="fixture-card">
+      <label for="challenge-selector">Preview challenge</label>
+      <select id="challenge-selector"></select>
+      <p class="hint">Frontend playground only. This selector will not exist in the final student app.</p>
     </section>
 
     <section class="student-card">
       <div class="section-heading">
         <span class="step-badge">1</span>
         <div>
-          <h2>Escolha seu nome</h2>
-          <p>Selecione ou digite seu nome.</p>
+          <h2>Choose your name</h2>
+          <p>Start typing and select yourself from the list.</p>
         </div>
       </div>
 
-      <label for="student-input">Nome do estudante</label>
-      <input id="student-input" type="text" autocomplete="off" placeholder="Digite seu nome...">
+      <label for="student-input">Student name</label>
+      <input id="student-input" type="text" autocomplete="off" placeholder="Start typing your name...">
       <ul id="student-suggestions" class="suggestions"></ul>
       <p id="student-status" class="hint"></p>
     </section>
 
+    
     <section id="challenge" class="challenge-card"></section>
 
     <section class="answer-card">
       <div class="section-heading">
         <span class="step-badge">3</span>
         <div>
-          <h2>Sua resposta</h2>
-          <p>Explique seu raciocínio.</p>
+          <h2>Your answer</h2>
+          <p>Choose, explain, and make your reasoning visible.</p>
         </div>
       </div>
 
       <form id="response-form"></form>
       <div id="form-message" class="form-message hidden" role="status" aria-live="polite"></div>
-      <button id="submit-button" type="button">Enviar</button>
+      <button id="submit-button" type="button">Submit challenge</button>
     </section>
 
     <section id="feedback" class="feedback-card hidden"></section>
