@@ -51,13 +51,15 @@ Para usar o OpenSpec nesta experiência, o fluxo básico foi:
 
 ### Dependências
 
-- `git`, porque o trabalho faz mais sentido em um repositório versionado
+
 - `node`/`npm`, para instalação do OpenSpec quando necessário
 - `openspec`, para inicializar e manter os artefatos de especificação
+- Um gerenciador de agentes, por exemplo opencode
 
-Opcionais usados:
+Opcionais/seleções usados:
 
 - `opencode`, usado nesta experiência como agente no terminal
+- `git`, porque o trabalho faz mais sentido em um repositório versionado
 - VS Code, usado como ambiente de trabalho
 
 
