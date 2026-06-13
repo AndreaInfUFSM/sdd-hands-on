@@ -132,8 +132,29 @@ else
 fi
 
 echo
-echo "4. Python / uv diagnostics"
-echo "------------------------"
+echo "4. OpenCode CLI"
+echo "---------------"
+
+if command_exists opencode; then
+  print_ok "opencode found: $(version_line opencode)"
+else
+  print_warn "opencode command not found."
+  echo
+  echo "   To install OpenCode on macOS/Linux:"
+  echo "   curl -fsSL https://opencode.ai/install | bash"
+  echo
+  echo "   After installing, restart your terminal or reload your shell profile if needed."
+  echo
+  echo "   Then verify with:"
+  echo "   opencode --version"
+  echo
+  echo "   To start OpenCode in the current project:"
+  echo "   opencode"
+fi
+
+echo
+echo "5. Python / uv diagnostics"
+echo "--------------------------"
 
 if command_exists python3; then
   print_ok "python3 found: $(version_line python3)"
