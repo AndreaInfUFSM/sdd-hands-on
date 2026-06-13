@@ -1,8 +1,8 @@
 <!--
-author: Andrea
+author: Andrea Charão
 title: Primeiros passos com Spec Kit
 language: pt
-comment: Notas mínimas sobre o uso do Spec Kit para iniciar uma aplicação simples.
+comment: Anotações sobre o uso do Spec Kit para iniciar uma aplicação simples.
 import: https://raw.githubusercontent.com/LiaTemplates/mermaid_template/0.1.4/README.md
 -->
 
@@ -57,7 +57,7 @@ Ver mais detalhes na sequência.
 - `uv` ou `pipx` (para instalação)
 - um agente de IA compatível, como Copilot, Claude, Gemini, Codex, Cursor, entre outros
 
-### Instalação 
+### Instalação e inicialização
 
 Instalação persistente:
 
@@ -148,6 +148,10 @@ Fluxo um pouco mais cuidadoso:
 
 ### Conclusão
 
-- Primeira rodada do fluxo é bem simples
-- Rodadas subsequentes exigem mais atenção
+- Primeira rodada do fluxo é simples, embora possa demorar para executar
+- Rodadas subsequentes do fluxo exigem mais atenção
+- Particularidade do SpecKit: 
+
+  - muito sensível à localização da pasta .git, o que exigiu uma gambiarra neste repositório ssd-hands-on, que já tinha uma pasta .git (tive que criar um subrepo não rastreado para inicializar o SpecKit, depois remover o .git que ele cria)
+  - uso mais natural: inicializar o SpecKit na raiz de um repositório
 
