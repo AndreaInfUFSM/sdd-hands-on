@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenge of the Day</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <header id="app-header">
+      <h1 id="course-name">Challenge of the Day</h1>
+    </header>
+
+    <main>
+      <div id="loading-indicator" class="loading">Loading...</div>
+      <div id="error-message" class="error hidden" role="alert"></div>
+      <div id="no-challenge" class="empty-state hidden">
+        <p>No challenge is available for today.</p>
+      </div>
+
+      <div id="challenge-container" class="hidden">
+        <div id="student-section">
+          <label for="student-input">Your name</label>
+          <div id="student-selector" class="autocomplete">
+            <input type="text" id="student-input" placeholder="Start typing your name..." autocomplete="off">
+            <ul id="student-suggestions" class="suggestions hidden"></ul>
+          </div>
+          <div id="student-status" class="field-status hidden"></div>
+        </div>
+
+        <div id="challenge-content">
+          <div id="intro-blocks"></div>
+          <div id="prompt-blocks"></div>
+          <form id="response-form" novalidate>
+            <div id="response-fields"></div>
+            <button type="submit" id="submit-btn" disabled>Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="feedback-container" class="hidden">
+        <div id="feedback-content"></div>
+        <div id="after-submission-blocks"></div>
+      </div>
+    </main>
+
+    <footer>
+      <p id="frontend-version"></p>
+    </footer>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/student-selector.js"></script>
+  <script src="js/challenge-renderer.js"></script>
+  <script src="js/response-renderer.js"></script>
+  <script src="js/feedback-renderer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
