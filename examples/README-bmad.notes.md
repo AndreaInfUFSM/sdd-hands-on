@@ -10,3 +10,6 @@ npx bmad-method install
 │
 │  Selected tools:
 │    • OpenCode
+
+
+/bmad-quick-dev Read docs/challenge-of-the-day-app.md and use BMAD quick development flow to implement the first version of the Challenge of the Day app
