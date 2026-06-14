@@ -20,7 +20,7 @@ Um registro sobre o que aprendi ao usar o **BMAD** com **OpenCode** para iniciar
 
 **BMAD Method** é um framework para apoiar o **desenvolvimento de software com agentes de IA**, combinando planejamento, especificação, arquitetura e implementação guiada.
 
-BMAD organiza o trabalho como um fluxo com **papéis especializados**: alguns agentes ajudam a entender o problema e produzir artefatos de planejamento; outros ajudam a transformar esses artefatos em histórias, tarefas e código. 
+BMAD organiza o trabalho como um fluxo com **papéis especializados**: alguns agentes ajudam a entender o problema e produzir artefatos de planejamento; outros agentes ajudam a transformar esses artefatos em histórias, tarefas e código. 
 
 ```mermaid @mermaid
 flowchart LR
@@ -36,7 +36,7 @@ Links úteis:
 - Documentação oficial: https://docs.bmad-method.org/
 - Repositório no GitHub: https://github.com/bmad-code-org/BMAD-METHOD
 
-![Página do BMAD Method](https://opengraph.githubassets.com/bmad-code-org/BMAD-METHOD)
+
 
 ## Quick vs Full
 
@@ -136,6 +136,7 @@ No uso com **OpenCode**, o BMAD pode aparecer mais como **skills/agentes** do qu
 Outros comandos / skills:
 
 | Comando / skill | Para que serve |
+|---|---|
 | `bmad-orchestrator` | Coordena o uso dos agentes e ajuda a escolher o próximo passo do fluxo BMAD |
 | `bmad-analyst` | Ajuda a entender o problema, levantar requisitos e organizar ideias iniciais |
 | `bmad-pm` | Apoia a criação de documentos de produto, escopo e prioridades |
@@ -158,10 +159,10 @@ Outros comandos / skills:
 
 Passos realizados:
 
-1. Instalei e iicializei o BMAD na pasta existente [03-bmad-quick](03-bmad-quick/):
+1. Instalei e inicializei o BMAD na pasta existente (03-bmad-quick):
 
    ```bash
-   cd 03-bmad-quick
+   cd examples/03-bmad-quick
    npx bmad-method install
    ```
 
@@ -204,7 +205,6 @@ Passos realizados:
 6. Pedi a criação da primeira versão do app:
 
    ```text
-   /skills
    /bmad-quick-dev Read docs/challenge-of-the-day-app.md and use BMAD quick development flow to implement the first version of the Challenge of the Day app
    ```
 

@@ -19,15 +19,13 @@ O repositório contém requisitos, scripts de configuração, documentação e o
 
 | Pasta | Método | Objetivo |
 |---|---|---|
-| `examples/01-speckit` | Spec Kit | Gerar a aplicação usando o fluxo do Spec Kit |
-| `examples/02-openspec` | OpenSpec | Gerar a aplicação usando OpenSpec com OpenCode |
-| `examples/03-bmad-quick` | BMAD Quick | Gerar a aplicação usando o fluxo rápido do BMAD |
+| [examples/01-speckit](examples/01-speckit/) | Spec Kit | Gerar a aplicação usando o fluxo do Spec Kit |
+| [examples/02-openspec](examples/02-openspec/) | OpenSpec | Gerar a aplicação usando OpenSpec com OpenCode |
+| [examples/03-bmad-quick](examples/03-bmad-quick/) | BMAD Quick | Gerar a aplicação usando o fluxo rápido do BMAD |
 
-O arquivo de requisitos compartilhado está em:
+O arquivo de requisitos compartilhado está em: [examples/shared/requirements/challenge-of-the-day-app.md](examples/shared/requirements/challenge-of-the-day-app.md)
 
-```text
-examples/shared/requirements/challenge-of-the-day-app.md
-```
+
 
 ## Estrutura do repositório
 
@@ -52,18 +50,18 @@ examples/shared/requirements/challenge-of-the-day-app.md
 
 Este repositório inclui uma configuração de ambiente de desenvolvimento, permitindo sua execução diretamente no **GitHub Codespaces**.
 
-O ambiente inclui ferramentas básicas para os experimentos, como Node.js, Python, Git, GitHub CLI, OpenSpec e extensões úteis para Copilot, JSON e Mermaid.
+O ambiente inclui ferramentas básicas para os experimentos, como Node.js e Git. O restante terá que ser instalado manualmente.
 
 ## Verificando o ambiente
 
 Execute:
 
 ```bash
-./scripts/check-env.sh
+bash scripts/check-env.sh
 ```
 
-O script verifica as principais ferramentas usadas no hands-on e apresenta instruções de instalação quando algo está faltando.
+O script verifica as principais ferramentas usadas no hands-on e apresenta instruções de instalação quando algo estiver faltando.
 
 ## Observações
 
-Este repositório é exploratório. O objetivo não é apresentar uma aplicação final polida, mas comparar como diferentes ferramentas de SDD estruturam requisitos, planejamento, artefatos gerados e tentativas de implementação.
+Este repositório é exploratório. O objetivo é comparar como diferentes ferramentas de SDD estruturam requisitos, planejamento, artefatos gerados e tentativas de implementação. A aplicação gerada não foi testada e certamente precisaria de refinamento, mas o código tem indícios de que segue boa parte das especificações.
