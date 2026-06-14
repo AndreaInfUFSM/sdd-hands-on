@@ -6,7 +6,7 @@ comment: Anotações sobre o uso do OpenSpec com OpenCode para iniciar uma aplic
 import: https://raw.githubusercontent.com/LiaTemplates/mermaid_template/0.1.4/README.md
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/AndreaInfUFSM/ssd-hands-on/main/examples/README-openspec.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/AndreaInfUFSM/ssd-hands-on/main/docs/README-02-openspec.md)
 
 
 
