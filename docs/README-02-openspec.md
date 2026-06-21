@@ -138,7 +138,7 @@ Explicação sobre as pastas:
 
 Passos realizados:
 
-1. Inicializei o OpenSpec na pasta [02-openspec](02-openspec/):
+1. Inicializei o OpenSpec na pasta [02-openspec](../examples/02-openspec/):
 
    ```bash
    openspec init
