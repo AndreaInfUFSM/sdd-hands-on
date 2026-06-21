@@ -2,7 +2,7 @@
 
 
 
-![](docs/assets/sdd-handdrawn-banner.png)
+![](docs/assets/sdd-handdrawn-banner.svg)
 
 
 Este repositório reúne experimentos com três frameworks de **desenvolvimento guiado por especificações** (*Spec-Driven Development*, SDD): SpecKit, OpenSpec e BMAD.
