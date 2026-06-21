@@ -80,17 +80,26 @@ echo "-------------------------"
 
 if command_exists specify; then
   print_ok "specify found: $(version_line specify)"
+  echo
+  echo "   Verify installation with:"
+  echo "   specify --version"
+  echo
 else
   print_warn "specify command not found."
-
+  echo
+  echo "   To install Spec Kit persistently:"
+  echo "   uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
+  echo
+  echo "   After installing, verify with:"
+  echo "   specify --version"
+  echo  
   if command_exists uv; then
     print_ok "uv found: $(version_line uv)"
     echo
-    echo "   To install Spec Kit persistently:"
+    echo "   Installing Spec Kit persistently requires uv:"
     echo "   uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
     echo
-    echo "   After installing, verify with:"
-    echo "   specify --version"
+
   else
     print_warn "uv not found. Spec Kit installation normally uses uv or uvx."
     echo
