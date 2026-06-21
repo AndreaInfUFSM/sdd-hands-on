@@ -18,7 +18,7 @@ Um registro sobre o que aprendi ao usar o **Spec Kit** para iniciar uma aplicaç
 
 ## Spec Kit
 
-**Spec Kit** é um toolkit do GitHub para apoiar **desenvolvimento guiado por especificações** (*Spec-Driven Development*).
+**Spec Kit** é um toolkit do GitHub, lançado em 2025, para apoiar **desenvolvimento guiado por especificações** (*Spec-Driven Development*).
 
 Em vez de começar escrevendo código diretamente, o fluxo começa pela **descrição estruturada** do que deve ser construído:
 
@@ -29,7 +29,7 @@ flowchart LR
     C --> D[implement]
 ```
 
-Na prática, isso ajuda a transformar uma conversa com um agente de IA em um processo um pouco mais organizado (menos vibe coding).
+Isso ajuda a transformar uma conversa com um agente de IA em um processo um pouco mais organizado (menos vibe coding).
 
 Links úteis:
 
@@ -53,7 +53,7 @@ Ver mais detalhes na sequência.
 
 ### Dependências 
 
-- `git` (porque Spec Kit assume que o projeto em desenvolvimento está em um repositório Git)
+- `git` (Spec Kit assume que o projeto em desenvolvimento está em um repositório Git)
 - `uv` ou `pipx` (para instalação)
 - um agente de IA compatível, como Copilot, Claude, Gemini, Codex, Cursor, entre outros
 
@@ -100,7 +100,7 @@ specify init meu-projeto --integration codex
 | `/speckit.implement` | Executa as tarefas e gera/modifica código |
 
 
-Fluxo um pouco mais cuidadoso:
+Fluxo um pouco mais longo:
 
 ```text
 /speckit.constitution
@@ -116,21 +116,21 @@ Fluxo um pouco mais cuidadoso:
 ## Experiência neste repositório
 
 - App "Desafio do Dia" para estudantes de Paradigmas de Programação
-- O fluxo de trabalho com `/speckit.specify` seria descrever uma primeira especificação de requisitos em forma de um prompt/chat
+- O fluxo de trabalho com `/speckit.specify` normalmente inicia com a especificação de requisitos em forma de um prompt/chat
 - No entanto, seria um prompt longo e, para aproveitá-lo em outras experiências, achei melhor colocar os requisitos em um arquivo, gerado com ChatGPT
-- Arquivo com requisitos: [shared/requirements/challenge-of-the-day-app.md](shared/requirements/challenge-of-the-day-app.md)
+- Arquivo com requisitos: [../examples/shared/requirements/challenge-of-the-day-app.md](../examples/shared/requirements/challenge-of-the-day-app.md)
 - Usei `/speckit.specify` com instruções para ler o documento de requisitos como entrada 
 
 ### Primeira rodada do workflow
 
-- Pasta [01-speckit/specs/001-challenge-of-the-day-app/](01-speckit/specs/001-challenge-of-the-day-app/)
-- Arquivo [spec.md](01-speckit/specs/001-challenge-of-the-day-app/spec.md)
-- Arquivo [plan.md](01-speckit/specs/001-challenge-of-the-day-app/plan.md)
-- Arquivo [tasks.md](01-speckit/specs/001-challenge-of-the-day-app/tasks.md)
+- Pasta [01-speckit/specs/001-challenge-of-the-day-app/](../examples/01-speckit/specs/001-challenge-of-the-day-app/)
+- Arquivo [spec.md](../examples/01-speckit/specs/001-challenge-of-the-day-app/spec.md)
+- Arquivo [plan.md](../examples/01-speckit/specs/001-challenge-of-the-day-app/plan.md)
+- Arquivo [tasks.md](../examples/01-speckit/specs/001-challenge-of-the-day-app/tasks.md)
 - Implementação (código gerado pelo agente)
 
-  - [frontend](01-speckit/frontend/)
-  - [backend](01-speckit/backend/)
+  - [frontend](../examples/01-speckit/frontend/)
+  - [backend](../examples/01-speckit/backend/)
 
 - **Reflexão**: Bom início de implementação, mas resultado um pouco distante do desejado. Especificação poderia ter dado mais ênfase no estilo do frontend.
 
@@ -138,7 +138,7 @@ Fluxo um pouco mais cuidadoso:
 
 - Geração de alternativas de frontend por fora do Spec Kit
 
-- Pasta [frontend-playground](01-speckit/frontend-playground/)
+- Pasta [frontend-playground](../examples/01-speckit/frontend-playground/)
 
 - Uma vez escolhida a melhor alternativa de design do frontend, a ideia era integrar os arquivos à versão anterior, preservando algumas partes e alterando outras 
 

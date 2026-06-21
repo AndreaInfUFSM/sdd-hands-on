@@ -45,7 +45,7 @@ Este repositório contém a especificação de um container que pode ser executa
 
 </details>
 
-<br>
+
 
 ⚠️ O ambiente de execução inclui ferramentas básicas para os experimentos. O restante deve ser instalado **manualmente**.
 
