@@ -15,22 +15,21 @@ O repositório contém requisitos, scripts de configuração, documentação e o
 
 ## ➡️ Configure seu ambiente de execução
 
-Este repositório contém a especificação de um container para:
-- (a) execução no GitHub Codespaces **ou**
-- (b) em um ambiente local com Docker e VS Code.
+Este repositório contém a especificação de um container que pode ser executado de 2 formas:
 
-O ambiente do GitHub Codespaces roda Linux, e todos os comandos neste repositório só foram testados nesse sistema, mas provavelmente também sejam viáveis em Windows.
-
-O ambiente de execução inclui ferramentas básicas para os experimentos, como Node.js e Git. O restante deve ser instalado manualmente.
-
-### (a) Remotamente no GitHub Codespaces
+<details>
+<summary><strong>Opção 1: Remotamente no GitHub Codespaces</strong></summary>
 
 - Faça login no GitHub
 - Acesse este repositório: https://github.com/AndreaInfUFSM/sdd-hands-on
 - Clique em Code -> Codespaces -> + (Create a codespace on main)
 - Aguarde pacientemente a criação do codespace
 
-### (b) Localmente com Docker e VS Code
+</details>
+
+
+<details>
+<summary><strong>Opção 2: Localmente com Docker e VS Code</strong></summary>
 
 - Instale [Docker Engine](https://docs.docker.com/engine/install/) e VS Code
 - Teste o funcionamento do Docker localmente
@@ -43,6 +42,13 @@ O ambiente de execução inclui ferramentas básicas para os experimentos, como 
 - Clone este repositório localmente: https://github.com/AndreaInfUFSM/sdd-hands-on
 - Abra o repositório com VS Code e instale a extensão [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 - Aguarde pacientemente a criação do container (dá para acompanhar os logs para se certificar de que a criação está em andamento)
+
+</details>
+
+<br>
+
+⚠️ O ambiente de execução inclui ferramentas básicas para os experimentos. O restante deve ser instalado **manualmente**.
+
 
 
 
@@ -134,4 +140,6 @@ Manual:     requirements.md → plan.md → tasks.md → code
 
 ## ➡️ Observações
 
-Este repositório é exploratório. O objetivo é comparar como diferentes ferramentas de SDD estruturam requisitos, planejamento, artefatos gerados e tentativas de implementação. A aplicação gerada não foi testada e certamente precisaria de refinamento, mas o código tem indícios de que segue boa parte das especificações.
+- Este repositório é exploratório. O objetivo é comparar como diferentes ferramentas de SDD estruturam requisitos, planejamento, artefatos gerados e tentativas de implementação. 
+- A aplicação gerada não foi testada e certamente precisaria de refinamento, mas o código tem indícios de que segue boa parte das especificações.
+- O ambiente do GitHub Codespaces roda Linux, e todos os comandos neste repositório só foram testados nesse sistema, mas provavelmente também sejam viáveis em Windows.
