@@ -4,18 +4,36 @@
 
 ![](docs/assets/sdd-handdrawn-banner.svg)
 
+<p align="center">
+    <strong>Experimente: 1 aplicação + 3 SDD frameworks</strong>
+</p>
 
-Este repositório reúne experimentos com três frameworks de **desenvolvimento guiado por especificações** (*Spec-Driven Development*, SDD): SpecKit, OpenSpec e BMAD.
+## ➡️ Sumário
 
 
-Os 3 frameworks foram aplicados à geração inicial de uma mesma aplicação: o **Desafio do Dia**, uma aplicação web simples para apresentar desafios diários de programação. Apesar de simples, a arquitetura não é óbvia/clássica, pois usa um backend com Google Apps Script.
+- [O que tem aqui?](#o-que-tem-aqui)
+- [Configure seu ambiente de execução](#configure-seu-ambiente-de-execução)
+- [Verifique o ambiente](#verifique-o-ambiente)
+- [Anotações sobre cada experimento](#anotações-sobre-cada-experimento)
+- [Arquivos e pastas](#arquivos-e-pastas)
+- [Síntese comparativa](#síntese-comparativa)
+- [Saiba mais](#saiba-mais)
 
-O repositório contém requisitos, scripts de configuração, documentação e os arquivos resultantes gerados durante os experimentos. Também pode ser executado em um **GitHub Codespace**.
+
+## ➡️ O que tem aqui?
+
+- Este repositório reúne experimentos com três frameworks de **desenvolvimento guiado por especificações** (*Spec-Driven Development*, SDD): SpecKit, OpenSpec e BMAD.
+
+
+- Os 3 frameworks foram aplicados à geração inicial de uma mesma aplicação: o **Desafio do Dia**, uma aplicação web simples para apresentar desafios diários de programação.
+
+- Apesar de simples, a arquitetura especificada não é óbvia/clássica, pois usa um backend com Google Apps Script.
+
+- O repositório contém requisitos, scripts de configuração, documentação e os arquivos resultantes gerados durante os experimentos. Também pode ser executado em um **GitHub Codespace**.
 
 
 ## ➡️ Configure seu ambiente de execução
 
-Este repositório contém a especificação de um container que pode ser executado de 2 formas:
 
 <details>
 <summary><strong>Opção 1: Remotamente no GitHub Codespaces</strong></summary>
@@ -27,6 +45,7 @@ Este repositório contém a especificação de um container que pode ser executa
 
 </details>
 
+<br> 
 
 <details>
 <summary><strong>Opção 2: Localmente com Docker e VS Code</strong></summary>
@@ -45,7 +64,7 @@ Este repositório contém a especificação de um container que pode ser executa
 
 </details>
 
-
+<br> 
 
 ⚠️ O ambiente de execução inclui ferramentas básicas para os experimentos. O restante deve ser instalado **manualmente**.
 
@@ -55,16 +74,18 @@ Este repositório contém a especificação de um container que pode ser executa
 ## ➡️ Verifique o ambiente
 
 
-Depois de iniciar seu ambiente de execução, abra um terminal dentro do repositório/container e execute:
+- Depois de iniciar seu ambiente de execução, abra um terminal dentro do repositório/container e execute:
 
-```bash
-bash scripts/check-env.sh
-```
+  ```bash
+  bash scripts/check-env.sh
+  ```
 
-Esse script verifica as principais ferramentas usadas no hands-on e apresenta instruções de instalação manual para o que estiver faltando.
+- Esse script verifica as principais ferramentas usadas no hands-on e apresenta instruções de instalação manual para o que estiver faltando.
 
 
-## ➡️ Anotações detalhadas sobre cada experimento
+## ➡️ Anotações sobre cada experimento
+
+Escolha sua ferramenta e veja as anotações detalhadas sobre ela.
 
 | Framework | Documentação |
 |---|---|
@@ -143,3 +164,4 @@ Manual:     requirements.md → plan.md → tasks.md → code
 - Este repositório é exploratório. O objetivo é comparar como diferentes ferramentas de SDD estruturam requisitos, planejamento, artefatos gerados e tentativas de implementação. 
 - A aplicação gerada não foi testada e certamente precisaria de refinamento, mas o código tem indícios de que segue boa parte das especificações.
 - O ambiente do GitHub Codespaces roda Linux, e todos os comandos neste repositório só foram testados nesse sistema, mas provavelmente também sejam viáveis em Windows.
+
