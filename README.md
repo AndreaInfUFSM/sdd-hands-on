@@ -12,6 +12,7 @@
 
 
 - [O que tem aqui?](#%EF%B8%8F-o-que-tem-aqui)
+- [Para que serve?](#%EF%B8%8F-para-que-serve)
 - [Configure seu ambiente de execução](#%EF%B8%8F-configure-seu-ambiente-de-execução)
 - [Verifique o ambiente](#%EF%B8%8F-verifique-o-ambiente)
 - [Anotações sobre cada experimento](#%EF%B8%8F-anotações-sobre-cada-experimento)
@@ -25,11 +26,21 @@
 - Este repositório reúne experimentos com três frameworks de **desenvolvimento guiado por especificações** (*Spec-Driven Development*, SDD): SpecKit, OpenSpec e BMAD.
 
 
-- Os 3 frameworks foram aplicados à geração inicial de uma mesma aplicação: o **Desafio do Dia**, uma aplicação web simples para apresentar desafios diários de programação.
+- Os 3 frameworks foram aplicados à geração inicial de uma mesma aplicação: o **Desafio do Dia**, uma aplicação web simples para apresentar um desafio diário com uma questão sobre programação.
 
-- Apesar de simples, a arquitetura especificada não é óbvia/clássica, pois usa um backend com Google Apps Script.
+- Apesar de simples, a arquitetura especificada não é óbvia/clássica, pois usa um backend com Google Apps Script. Esse detalhe visa complicar sutilmente o processo.
 
-- O repositório contém requisitos, scripts de configuração, documentação e os arquivos resultantes gerados durante os experimentos. Também pode ser executado em um **GitHub Codespace**.
+- Neste repositório você encontra scripts de configuração, documentação, requisitos de entrada  e arquivos resultantes gerados durante os experimentos. O repositório pode ser executado em um **GitHub Codespace** ou **Dev Container** local no VS Code.
+
+
+## ➡️ Para que serve?
+
+Use este repositório para:
+
+- Fazer uma prática rápida com esses 3 frameworks, abreviando o processo de instalação de dependências 
+
+- Conhecer exemplos de saída dos processos a partir de uma mesma entrada
+
 
 
 ## ➡️ Configure seu ambiente de execução
