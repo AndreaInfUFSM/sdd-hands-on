@@ -1,0 +1,124 @@
+@import './design-tokens.css';
+
+:root {
+  /* Component Tokens: Neumorphic Shadows built from Atomic Design Tokens */
+  --shadow-extruded-large: 
+    var(--dropshadow-extrudedout-softelevation-large-shadowoffset) 
+    var(--dropshadow-extrudedout-softelevation-large-shadowoffset) 
+    var(--dropshadow-extrudedout-softelevation-large-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxdark), 
+    var(--dropshadow-extrudedout-softelevation-large-lightoffset) 
+    var(--dropshadow-extrudedout-softelevation-large-lightoffset) 
+    var(--dropshadow-extrudedout-softelevation-large-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxlight);
+
+  --shadow-extruded-medium: 
+    var(--dropshadow-extruded-softelevation-medium-shadowoffset) 
+    var(--dropshadow-extruded-softelevation-medium-shadowoffset) 
+    var(--dropshadow-extruded-softelevation-medium-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxdark), 
+    var(--dropshadow-extruded-softelevation-medium-lightoffset) 
+    var(--dropshadow-extruded-softelevation-medium-lightoffset) 
+    var(--dropshadow-extruded-softelevation-medium-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxlight);
+    
+  --shadow-extruded-flat: 
+    var(--dropshadow-extrudedflat-softelevation-flat-shadowoffset) 
+    var(--dropshadow-extrudedflat-softelevation-flat-shadowoffset) 
+    var(--dropshadow-extrudedflat-softelevation-flat-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxdark), 
+    var(--dropshadow-extrudedflat-softelevation-flat-lightoffset) 
+    var(--dropshadow-extrudedflat-softelevation-flat-lightoffset) 
+    var(--dropshadow-extrudedflat-softelevation-flat-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxlight);
+
+  --shadow-inset-medium: 
+    inset var(--dropshadow-inset-softelevation-medium-shadowoffset) 
+    var(--dropshadow-inset-softelevation-medium-shadowoffset) 
+    var(--dropshadow-inset-softelevation-medium-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxlight), 
+    inset var(--dropshadow-inset-softelevation-medium-lightoffset) 
+    var(--dropshadow-inset-softelevation-medium-lightoffset) 
+    var(--dropshadow-inset-softelevation-medium-blur) 
+    var(--color-semantic-boxshadow-boxshadowfxdark);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-semantic-backgroundcolor-backgrounddefault);
+  color: var(--color-semantic-text-textdark);
+  font-family: var(--typography-fontfamilies-mainsans), sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  /* Restrict max width for desktop to look like a mobile app */
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Optional: add a subtle drop shadow on desktop */
+}
+
+/* Ensure html also has the background color so the sides aren't white */
+html {
+  background-color: var(--color-semantic-backgroundcolor-backgrounddimmer, #f0f0f0);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Base Neumorphic Classes - if needed globally, mas usaremos aqui para simplificar as lógicas */
+.neu-container {
+  background: var(--color-semantic-backgroundcolor-backgrounddefault);
+  box-shadow: var(--shadow-extruded-large);
+  border-radius: var(--radius-radius-medium);
+}
+
+.neu-button {
+  background: var(--color-semantic-backgroundcolor-backgrounddefault);
+  box-shadow: var(--shadow-extruded-medium); /* Use extruded by default */
+  transition: box-shadow 0.2s ease-in-out;
+}
+.neu-button:active {
+  box-shadow: var(--shadow-inset-medium) !important;
+}
+
+.neu-input {
+  box-shadow: var(--shadow-inset-medium) !important;
+  background: var(--color-semantic-backgroundcolor-backgrounddefault);
+}
+
+.chat-footer {
+  padding: 16px 24px;
+  background-color: transparent;
+  position: relative;
+  z-index: 11;
+}
+
+@media (max-width: 768px) {
+  .chat-footer {
+    padding: 16px var(--spacing-md); /* Consistent spacing with the margins of the main content */
+  }
+}
+
+
+/* Markdown defaults within message bubbles */
+p {
+  margin-bottom: var(--spacing-sm);
+}
+p:last-child {
+  margin-bottom: 0;
+}
+strong {
+  font-weight: 700;
+}
+ul, ol {
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}

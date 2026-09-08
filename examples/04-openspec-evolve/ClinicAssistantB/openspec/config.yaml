@@ -1,0 +1,87 @@
+schema: spec-driven
+
+context: |
+  Assistente-HUSM is an existing working prototype for medical education.
+  It should be evolved incrementally into a system robust enough for small
+  real-world trials with medical-school professors and students.
+
+  Purpose:
+  - The system is an educational assistant for medical teaching and learning.
+  - It is not intended to behave as a generic chatbot.
+
+  Users:
+  - Professors and instructors.
+  - Medical students.
+
+  Core activity:
+  - Support the generation and use of clinical cases for learning.
+
+  Pedagogical grounding:
+  - Clinical cases should be derived from explicit learning objectives.
+  - Generation should consider an explicit pedagogical rationale.
+  - Clinical content should be grounded in trusted medical sources.
+
+  AI boundaries:
+  - The LLM should generate or adapt content within supplied pedagogical
+    and clinical constraints.
+  - The LLM should not be responsible for inventing the entire learning
+    activity without explicit grounding and context.
+
+  Traceability:
+  - Generated material should retain enough provenance to identify the
+    learning objective, medical sources, and relevant generation context
+    that produced it.
+
+  Professor control:
+  - Educators should be able to review, validate, or control generated
+    material before students rely on it.
+
+  Reliability:
+  - Failures involving the LLM, APIs, or backend should be explicit.
+  - Failure states should be recoverable whenever reasonably possible.
+  - The system should avoid silently producing incomplete or invalid results.
+  - The system should distinguish between major classes of LLM request failure 
+    when this distinction can guide recovery or user feedback.
+  - At minimum, distinguish transient connectivity/time-out failures, 
+    provider/service unavailability, and quota/rate-limit failures when detectable.
+  - Provider-specific error codes should be translated into application-level 
+    failure categories rather than exposed directly to the rest of the system.
+
+  User interface:
+  - Preserve the visual identity and basic interaction model of the
+    existing prototype.
+  - Improve usability incrementally rather than redesigning the interface
+    wholesale.
+  - Existing UI behavior should not be considered immutable when there is
+    a clear usability or reliability problem.
+
+  Architecture:
+  - Next.js, Supabase, and the currently selected LLM are acceptable
+    technological constraints.
+  - LLM
+  - Application modules should avoid unnecessary coupling to a specific
+    LLM provider or external service.
+  - Backend evolution should favor clear boundaries, validation, and
+    testable components over direct prototype-style integrations.
+
+  Principles:
+    - Preserve the existing stack unless there is a demonstrated reason to change it.
+    - Separate presentation from application and domain logic.
+    - Keep persistence and LLM-provider code behind explicit module boundaries.
+    - Prefer changes with a narrow blast radius.
+    - Make domain concepts and responsibilities explicit.
+    - Avoid duplicated sources of truth.
+    - Favor small, testable units of behavior.
+    - Keep refactoring incremental rather than rewriting the prototype.
+    - Prefer explicit application behavior over unnecessary framework magic.    
+
+  Data:
+  - Supabase may remain as the persistence layer.
+  - Persistence requirements should be defined explicitly as the system evolves.
+  - Avoid persisting data merely because the current prototype happens to do so.
+
+  Evaluation:
+  - The system should become stable and understandable enough to support
+    small real-world trials with professors and students.
+  - Changes should improve the ability to observe, test, and evaluate the
+    learning experience and system behavior.
