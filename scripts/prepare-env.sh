@@ -160,13 +160,12 @@ echo "-------------------------"
 if command_exists opencode; then
   print_ok "opencode already installed: $(version_line opencode --version)"
 else
-  print_info "Installing OpenCode..."
-  curl -fsSL https://opencode.ai/install | bash
-
-  refresh_path
+  print_info "Installing OpenCode with npm..."
+  npm install -g opencode-ai
 
   if ! command_exists opencode; then
     print_error "OpenCode installation completed but 'opencode' is not available on PATH."
+    print_error "npm global bin directory: $(npm prefix -g)/bin"
     exit 1
   fi
 
@@ -178,7 +177,11 @@ echo "6. Configuring OpenCode"
 echo "-----------------------"
 
 OPENCODE_MODEL="opencode/big-pickle"
-OPENCODE_CONFIG="opencode.json"
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+OPENCODE_CONFIG="$REPO_ROOT/opencode.json"
+
+print_info "Writing project configuration to: $OPENCODE_CONFIG"
 
 node - "$OPENCODE_CONFIG" "$OPENCODE_MODEL" <<'NODE'
 const fs = require("fs");
